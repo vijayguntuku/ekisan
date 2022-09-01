@@ -3,6 +3,7 @@ package com.wavemaker.ekisan.filiters;
 import com.wavemaker.ekisan.dto.Response;
 import com.wavemaker.ekisan.dto.User;
 import com.wavemaker.ekisan.utility.Constants;
+import com.wavemaker.ekisan.utility.DBMasterConstants;
 import com.wavemaker.ekisan.utility.JsonUtils;
 import com.wavemaker.ekisan.utility.ResponseUtils;
 
@@ -25,10 +26,12 @@ public class AuthenticationFilter implements Filter {
         User user = (User)session.getAttribute(Constants.SESSION_USER);
         String uri = httpServletRequest.getRequestURI();
         PrintWriter out = httpServletResponse.getWriter();
-        if((uri.contains("admin") && Constants.ROLE_ADMIN.equals(user.getRole()))
-                || (uri.contains("buyer") && Constants.ROLE_BUYER.equals(user.getRole()))
-                || (uri.contains("seller") && Constants.ROLE_SELLER.equals(user.getRole()))
-                || uri.contains("login")){
+            if(uri.contains("login")){
+                filterChain.doFilter(servletRequest , servletResponse);
+            }else if(user!=null &&
+                ((uri.contains("admin") && DBMasterConstants.ROLE_ADMIN.equals(user.getRole()))
+                || (uri.contains("buyer") && DBMasterConstants.ROLE_BUYER.equals(user.getRole()))
+                || (uri.contains("seller") && DBMasterConstants.ROLE_SELLER.equals(user.getRole())))){
             filterChain.doFilter(servletRequest , servletResponse);
         } else if(null== user){
             Response resp = ResponseUtils.createResponse(false,"Login Required", 401,null);

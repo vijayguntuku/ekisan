@@ -1,5 +1,6 @@
 package com.wavemaker.ekisan.utility;
 
+import com.wavemaker.ekisan.dto.ErrorHolder;
 import com.wavemaker.ekisan.dto.Response;
 import org.slf4j.Logger;
 
@@ -21,7 +22,5 @@ public class ResponseUtils {
         resp.setData(data);
         return resp;
     }
-
-
 
 }

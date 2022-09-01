@@ -17,22 +17,22 @@ public class UserDaoImpl implements UserDao{
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDaoImpl.class);
 
     @Override
-    public User findUser(String username, String password) {
+    public User findUser(String email, String password) {
         Connection connection= null;
         PreparedStatement preparedStatement = null;
         User user = null;
         try{
             connection = DBConnection.getConnectionNonSingleTon();
-            preparedStatement= connection.prepareStatement("select * from user where username=? and password=?");
-            preparedStatement.setString(1,username);
+            preparedStatement= connection.prepareStatement("select u.*,r.name as rolename  from user u inner join role r on u.role=r.id where email=? and password=?");
+            preparedStatement.setString(1,email);
             preparedStatement.setString(2, password);
             ResultSet resultset = preparedStatement.executeQuery();
 
             resultset.next();
             user = new User();
-            user.setUsername(resultset.getString("username"));
+            user.setEmail(resultset.getString("email"));
             //user.setFirstName(resultset.getString("firstname"));
-            user.setRole(resultset.getString("role"));
+            user.setRole(resultset.getString("rolename"));
 
         }catch (DatabaseException databaseException){
             LOGGER.error("Exception while creating Database Connection.", databaseException);

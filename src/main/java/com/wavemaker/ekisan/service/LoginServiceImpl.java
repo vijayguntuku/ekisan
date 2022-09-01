@@ -23,9 +23,9 @@ public class LoginServiceImpl implements LoginService{
     public Response login(LoginRequest loginRequest, HttpSession session) {
         Response resp = null;
         try {
-            User user = userDao.findUser(loginRequest.getUsername(), loginRequest.getPassword());
+            User user = userDao.findUser(loginRequest.getEmail(), loginRequest.getPassword());
             if(user!=null) {
-                resp = ResponseUtils.createResponse(true, "Loggedin Successfully",200,null);
+                resp = ResponseUtils.createResponse(true, "Loggedin Successfully",200,user);
                 session.setAttribute(Constants.SESSION_USER,user);
             }
             else {
