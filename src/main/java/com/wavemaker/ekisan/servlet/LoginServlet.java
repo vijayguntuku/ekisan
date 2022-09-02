@@ -2,7 +2,7 @@ package com.wavemaker.ekisan.servlet;
 
 import com.wavemaker.ekisan.dto.Response;
 import com.wavemaker.ekisan.request.LoginRequest;
-import com.wavemaker.ekisan.service.LoginService;
+import com.wavemaker.ekisan.service.UserService;
 import com.wavemaker.ekisan.utility.ResponseUtils;
 import com.wavemaker.ekisan.utility.JsonUtils;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ public class LoginServlet extends HttpServlet  {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginServlet.class);
 
     @Inject
-    LoginService loginService;
+    UserService userService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -35,7 +35,7 @@ public class LoginServlet extends HttpServlet  {
         Response resp = null;
        try {
            LoginRequest loginRequest = JsonUtils.convertToObject(request, LoginRequest.class);
-           resp = loginService.login(loginRequest, request.getSession());
+           resp = userService.login(loginRequest, request.getSession());
            PrintWriter out = response.getWriter();
            out.println(JsonUtils.convertToString(resp));
        }catch (Exception e){
