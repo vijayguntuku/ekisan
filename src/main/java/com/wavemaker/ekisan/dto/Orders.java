@@ -23,5 +23,6 @@ public class Orders{
     private Date updatedAt;
     private int updatedBy;
     private String status;
+    private int sellerId;
 
 }

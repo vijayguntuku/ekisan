@@ -7,7 +7,7 @@ import com.wavemaker.ekisan.dto.Response;
 public interface OrdersService {
     Response findOrderById(int id);
 
-    Response findAllOrders();
+    Response findAllOrders(int buyerId,int sellerId);
 
     Response saveOrUpdate(Orders orders);
 

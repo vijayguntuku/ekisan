@@ -5,7 +5,6 @@ import com.wavemaker.ekisan.dto.ErrorHolder;
 import com.wavemaker.ekisan.dto.Product;
 import com.wavemaker.ekisan.dto.Response;
 import com.wavemaker.ekisan.service.AddressService;
-import com.wavemaker.ekisan.utility.DBMasterConstants;
 import com.wavemaker.ekisan.utility.JsonUtils;
 import com.wavemaker.ekisan.utility.ResponseUtils;
 import org.slf4j.Logger;
@@ -21,16 +20,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @WebServlet(urlPatterns = {"/seller/address","/buyer/address","/admin/address"})
-
-
-
 public class AddressServlet extends HttpServlet {
-
-    @Inject
-    AddressService addressService;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(AddressServlet.class);
 
+   @Inject
+    AddressService addressService;
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         Response resp = null;

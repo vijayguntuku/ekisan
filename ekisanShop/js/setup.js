@@ -270,7 +270,7 @@ function eraseCookie1(name) {
 }
 
 function ongoAjaxRequest(urlpath, pms, successcb, failcb){
-	ongoAjaxRequestAsync(urlpath, pms, successcb, failcb, false)
+	ongoAjaxRequestAsync("POST",urlpath, pms, successcb, failcb, false)
 }
 
 function ongoorgid(){
@@ -280,11 +280,11 @@ function ongoorgid(){
 
 ongobuildusermenu();
 
-function ongoAjaxRequestAsync(urlpath, pms, successcb, failcb, asyncP){
+function ongoAjaxRequestAsync(dtype,urlpath, pms, successcb, failcb, asyncP){
 	var jsdata = (JSON.stringify(pms))
 	var request = $.ajax({
 		  url: ongosettings.apiurl+urlpath,
-		  type: "POST",
+		  type: dtype,
 		  beforeSend : ongoBeforeReq,
 		  data: jsdata,
 		  dataType: "json",
@@ -386,7 +386,7 @@ function ongoGetCurrentStore(st){
 	pms.mallId = ongoorgid();
 	/*pms.jobId = st.id;*/
 	var widgetJobs;
-	ongoAjaxRequestAsync('/MobileAPIs/getCustomJobs', pms, function(res){
+	ongoAjaxRequestAsync("POST",'/MobileAPIs/getCustomJobs', pms, function(res){
 		widgetJobs = res.widgetJobs;
 	}, null, false)	
 	$('#slidescover').find('div').remove();
@@ -726,7 +726,7 @@ function getWeblinks(){
 	
 var weblinkpms={mallId: ongoorgid()}
 	
-	ongoAjaxRequestAsync('/Users/getWeblinks', weblinkpms, function(weblinkData){
+	ongoAjaxRequestAsync("POST",'/Users/getWeblinks', weblinkpms, function(weblinkData){
 		if(weblinkData.statusCode == '200'){
 			$('#weblinks').show();
 			var weblinks = weblinkData.weblinks;
@@ -888,10 +888,33 @@ function ongobuildusermenu(){
 	}else{
 		$("#mycart").html('');
 		erasesession(false)
-		
 	}
+	ongoAjaxRequestAsync("GET",'/eKisan/buyer/categories','', function(res){
+		console.log(res);
+		var home = '<li><a href="index.html">Home</a></li>';	
+		$('#categoryList').append(home);
+		$.each(res.data, function(idx){
+	    var cat = res.data[idx];
+        var li = $('<li><a href="javascript:void(0)">'+cat.name+'</a></li>').click(function(){
+        	getProductsByCategory(cat.id)
+        });
+        $('#categoryList').append(li);
+			});
+		});
 }
 
+function getProductsByCategory(catId){
+window.location.href='product.html?catId='+catId;	
+}
+
+function loadProducts(){
+alert(new URL(location.href).searchParams.get("catId"));	
+	ongoAjaxRequestAsync("GET",'/eKisan/buyer/products','', function(res){
+		console.log(res);
+		$.each(res.data, function(idx){
+			});
+		});
+}
 
 function consolelogfunc(str){
 	if( consolelog ){
@@ -920,7 +943,7 @@ function ongologin(form){
 	pms.email = form.find('input[name=email]').val()
 	pms.password = form.find('input[name=password]').val()
 	
-	ongoAjaxRequestAsync('/eKisan/login', pms, function(res){
+	ongoAjaxRequestAsync("POST",'/eKisan/login', pms, function(res){
 		
 		if(res.statusCode == '200'){
 			ongoAfterLogin(res)
@@ -1024,7 +1047,7 @@ function ongoreg(form){
 function ongoreg1(pms){
 	pms.orgId = ongoorgid();
 	pms.dt='DEVICES';
-	ongoAjaxRequestAsync('/MobileAPIs/regAndloyaltyAPI', pms, function(res){
+	ongoAjaxRequestAsync("POST",'/MobileAPIs/regAndloyaltyAPI', pms, function(res){
 		if(res.statusCode == '200'){
 			ongoAfterLogin(res)
 		}else{
@@ -1063,7 +1086,7 @@ function ongoUpdateUser(form){
 function ongoUpdateUser1(pms){
 	pms.orgId = ongoorgid();
 	pms.dt='DEVICES';
-	ongoAjaxRequestAsync('/MobileAPIs/updateUserDetails', pms, function(res){
+	ongoAjaxRequestAsync("POST",'/MobileAPIs/updateUserDetails', pms, function(res){
 		if(res.statusCode == '200'){
 			createCookie('loginorg', res.orgId)
 			createCookie('loginid', res.UserId)
@@ -1109,7 +1132,7 @@ function ongochangepassword(form){
 
 function ongochangepassword1(pms){
 	pms.dt='DEVICES';
-	ongoAjaxRequestAsync('/MobileAPIs/changePassword', pms, function(d){
+	ongoAjaxRequestAsync("POST",'/MobileAPIs/changePassword', pms, function(d){
 		var res = d.myHashMap
 		if(res.statusCode == '200'){
 			window.location.href = '../profile/profile.html';
@@ -1147,7 +1170,7 @@ function ongoforgotpassword(form){
 function ongoforgotpassword1(pms){
 	pms.orgId = ongoorgid();
 	pms.dt='DEVICES';
-	ongoAjaxRequestAsync('/MobileAPIs/forgotpwd', pms, function(res){
+	ongoAjaxRequestAsync("POST",'/MobileAPIs/forgotpwd', pms, function(res){
 		if(res.statusCode == '200'){
 			window.location.href = '../profile/signin.html';
 		}else{
@@ -1590,7 +1613,7 @@ function ongoSubmitCart(){
 		
 		cartSubmitData.json = JSON.stringify(items);
 		
-		ongoAjaxRequestAsync('/MobileAPIs/postedJobs', cartSubmitData, function(d){
+		ongoAjaxRequestAsync("POST",'/MobileAPIs/postedJobs', cartSubmitData, function(d){
 			var res = d.myHashMap
 			if(res.statusCode == '200'){
 				eraseCookie('cart')
@@ -1750,7 +1773,7 @@ function ongoBuildSingleItem(){
 	    pmsc.userId = ongoGetLoginUser();
         pmsc.jobId = jid;
 
-        ongoAjaxRequestAsync('/jobs/getConsumerReview', pmsc, function(d){
+        ongoAjaxRequestAsync("POST",'/jobs/getConsumerReview', pmsc, function(d){
 			var res = d.myHashMap
 			if(res.statusCode == '200'){
 				var ratingType = 0;
@@ -2349,7 +2372,7 @@ function ongoSubmitService(form){
 	pms.json=JSON.stringify(o);
 	
 	//pms.srcFile = pms;
-	ongoAjaxRequestAsync('/MobileAPIs/postedJobs', pms, function(res){
+	ongoAjaxRequestAsync("POST",'/MobileAPIs/postedJobs', pms, function(res){
 		if(res.statusCode == '200'){
 			ongoAfterLogin(res)
 		}else{
@@ -2368,7 +2391,7 @@ function ongologinfromSearchPage(email){
 	pms.orgId = ongoorgid();
 	pms.dt='DEVICES';
 	pms.isLoginWithFB=true;
-	ongoAjaxRequestAsync('/MobileAPIs/regAndloyaltyAPI', pms, function(conLoginres){
+	ongoAjaxRequestAsync("POST",'/MobileAPIs/regAndloyaltyAPI', pms, function(conLoginres){
 		if(conLoginres.statusCode == '200'){
 			createCookie('loginorg', conLoginres.orgId)
 			createCookie('loginid', conLoginres.UserId)
