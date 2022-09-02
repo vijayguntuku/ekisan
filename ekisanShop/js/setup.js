@@ -910,8 +910,15 @@ window.location.href='product.html?catId='+catId;
 }
 
 function loadProducts(){
-alert(new URL(location.href).searchParams.get("catId"));	
-	ongoAjaxRequestAsync("GET",'/eKisan/buyer/products','', function(res){
+alert(new URL(location.href).searchParams.get("catId"));
+	var catId = new URL(location.href).searchParams.get("catId");
+	var url;
+	if(catId!=null && catId!=undefined && catId!="")
+	    url = '/eKisan/buyer/productlist?categoryId='+catId;
+	else
+	    url = '/eKisan/buyer/productlist?categoryId=';
+
+	ongoAjaxRequestAsync("GET",url,'', function(res){
 		console.log(res);
 		$.each(res.data, function(idx){
 			});

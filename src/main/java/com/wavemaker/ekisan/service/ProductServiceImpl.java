@@ -42,10 +42,11 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public Response findAllProducts() {
+    public Response findAllProducts(int categoryId) {
         Response resp = null;
         try {
-               resp = ResponseUtils.createResponse(true, "Product Retrieved successfully=",200,productDao.findAllProducts());
+             List<Product> product= productDao.findAllProducts(categoryId);
+               resp = ResponseUtils.createResponse(true, "Product Retrieved successfully=",200,product);
            }catch (DatabaseException e){
             String message = "ProductServiceImpl:findProduct() Exception occured while reading data from Database.";
             resp = ResponseUtils.createInternalServlerErrorResponse(LOGGER, e, message);

@@ -6,7 +6,7 @@ import com.wavemaker.ekisan.dto.Response;
 public interface ProductService {
     Response findProduct(int id, String status);
 
-    Response findAllProducts();
+    Response findAllProducts(int categoryId);
 
     Response saveOrUpdate(Product product);
 

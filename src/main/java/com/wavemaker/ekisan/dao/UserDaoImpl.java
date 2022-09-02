@@ -31,7 +31,8 @@ public class UserDaoImpl implements UserDao{
             user.setId(resultset.getInt("id"));
             user.setEmail(resultset.getString("email"));
             user.setName(resultset.getString("Name"));
-            user.setRole(resultset.getInt("role"));
+            user.setRoleName(resultset.getString("rolename"));
+
 
         }catch (DatabaseException databaseException){
             LOGGER.error("Exception while creating Database Connection.", databaseException);
@@ -99,7 +100,7 @@ public class UserDaoImpl implements UserDao{
         String query = null;
         User user = null;
         try {
-            query = "select * from users where id=? ";
+            query = "SELECT u.*, r.name AS roleName ,r.id AS roleId FROM USER u INNER JOIN ROLE r ON u.role=r.id where u.id=?";
             connection = DBConnection.getConnectionNonSingleTon();
             preparedStatement = connection.prepareStatement(query);
 
@@ -112,6 +113,7 @@ public class UserDaoImpl implements UserDao{
                 user.setEmail(resultset.getString("email"));
                 user.setName(resultset.getString("name"));
                 user.setRole(resultset.getInt("role"));
+                user.setRoleName(resultset.getString("roleName"));
 
             }
 

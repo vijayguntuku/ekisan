@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet("/seller/productlist")
+@WebServlet(urlPatterns ={"/seller/productlist","/buyer/productlist"})
 public class ProductListServlet extends HttpServlet {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductListServlet.class);
@@ -26,9 +26,12 @@ public class ProductListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Response response = null;
+        int categoryId= 0;
         try {
-
-            response = productService.findAllProducts();
+            String catId = req.getParameter("categoryId");
+            if(catId!=null && catId!= "")
+                categoryId = Integer.parseInt(catId);
+            response = productService.findAllProducts(categoryId);
             PrintWriter out = resp.getWriter();
             out.println(JsonUtils.convertToString(response));
         }catch (Exception e){

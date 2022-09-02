@@ -31,12 +31,12 @@ public class AuthenticationFilter implements Filter {
         User user = (User)session.getAttribute(Constants.SESSION_USER);
         String uri = httpServletRequest.getRequestURI();
         PrintWriter out = httpServletResponse.getWriter();
-            if(uri.contains("login") || uri.contains("categories") || uri.contains("products") ){
+            if(uri.contains("login") || uri.contains("categories") || uri.contains("products") || uri.contains("productlist") ){
                 filterChain.doFilter(servletRequest , servletResponse);
             }else if(user!=null &&
-                ((uri.contains("admin") && DBMasterConstants.ROLE_ADMIN.equals(user.getRole()))
-                || (uri.contains("buyer") && DBMasterConstants.ROLE_BUYER.equals(user.getRole()))
-                || (uri.contains("seller") && DBMasterConstants.ROLE_SELLER.equals(user.getRole())))){
+                ((uri.contains("admin") && DBMasterConstants.ROLE_ADMIN.equals(user.getRoleName()))
+                || (uri.contains("buyer") && DBMasterConstants.ROLE_BUYER.equals(user.getRoleName()))
+                || (uri.contains("seller") && DBMasterConstants.ROLE_SELLER.equals(user.getRoleName())))){
             filterChain.doFilter(servletRequest , servletResponse);
         } else if(null== user){
             Response resp = ResponseUtils.createResponse(false,"Login Required", 401,null);

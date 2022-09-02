@@ -63,14 +63,21 @@ public class ProductDaoImpl implements ProductDao{
     }
 
     @Override
-    public List<Product> findAllProducts() {
+    public List<Product> findAllProducts(int categoryId) {
         List<Product> productList = new ArrayList<>();
         Connection connection = null;
         PreparedStatement preparedStatement = null;
+
         Product product = null;
+        String query=null;
+        if(categoryId != 0){
+            query="select p.*,pc.id as productCategoryId, pc.name as productCategoryName, pc.description as productCategoryDesc from product p inner join product_category pc on p.product_category_id=pc.id where p.product_category_id="+categoryId;
+        }else {
+            query="select p.*,pc.id as productCategoryId, pc.name as productCategoryName, pc.description as productCategoryDesc from product p inner join product_category pc on p.product_category_id=pc.id";
+        }
         try {
             connection = DBConnection.getConnectionNonSingleTon();
-            preparedStatement = connection.prepareStatement("select p.*,pc.id as productCategoryId, pc.name as productCategoryName, pc.description as productCategoryDesc from product p inner join product_category pc on p.product_category_id=pc.id");
+            preparedStatement = connection.prepareStatement(query);
             ResultSet resultset = preparedStatement.executeQuery();
 
             while (resultset.next()) {

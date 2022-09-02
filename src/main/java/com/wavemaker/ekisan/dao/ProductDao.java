@@ -8,7 +8,7 @@ public interface ProductDao {
 
     Product findProductByID(int id, String status);
 
-    List<Product> findAllProducts();
+    List<Product> findAllProducts(int categoryId);
 
     boolean saveOrUpdate(Product product);
 

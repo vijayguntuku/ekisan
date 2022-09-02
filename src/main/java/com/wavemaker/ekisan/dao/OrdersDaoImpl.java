@@ -34,9 +34,10 @@ public class OrdersDaoImpl implements OrdersDao {
                 orders.setTotal_items(resultset.getInt("total_items"));
                 orders.setTotal_amount(resultset.getFloat("total_amount"));
                 orders.setDate(resultset.getDate("order_date"));
-                orders.setDelivery_address_id(resultset.getInt("delivery_address"));
+                orders.setDelivery_address_id(resultset.getInt("delivery_address_id"));
                 orders.setUpdatedAt(resultset.getDate("updatedAt"));
                 orders.setUpdatedBy(resultset.getInt("updatedBy"));
+                orders.setSellerId(resultset.getInt("sellerId"));
 
             }
 
