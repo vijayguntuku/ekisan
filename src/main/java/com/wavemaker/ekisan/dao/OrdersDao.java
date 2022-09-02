@@ -9,4 +9,6 @@ public interface OrdersDao {
   Orders findOrderByID(int id);
 
   List<Orders> findAllOrders();
+
+  public boolean saveOrUpdate(Orders orders);
 }

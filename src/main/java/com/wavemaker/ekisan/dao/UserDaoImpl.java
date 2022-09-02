@@ -31,7 +31,7 @@ public class UserDaoImpl implements UserDao{
             resultset.next();
             user = new User();
             user.setEmail(resultset.getString("email"));
-            //user.setFirstName(resultset.getString("firstname"));
+            user.setName(resultset.getString("Name"));
             user.setRole(resultset.getString("rolename"));
 
         }catch (DatabaseException databaseException){

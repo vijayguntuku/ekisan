@@ -11,7 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class User {
     private String email;
-    private String firstName;
-    private String lastName;
+    private String name;
     private String role;
 }

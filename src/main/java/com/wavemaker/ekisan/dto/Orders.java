@@ -14,13 +14,14 @@ import java.util.Date;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
-public class Orders {
+public class Orders{
     private int id;
     private int total_items;
     private float total_amount;
     private Date date;
-    private int delivery_address;
+    private int delivery_address_id;
     private Date updatedAt;
     private int updatedBy;
+    private String status;
 
 }
