@@ -910,7 +910,7 @@ window.location.href='product.html?catId='+catId;
 }
 
 function loadProducts(){
-alert(new URL(location.href).searchParams.get("catId"));
+//alert(new URL(location.href).searchParams.get("catId"));
 	var catId = new URL(location.href).searchParams.get("catId");
 	var url;
 	if(catId!=null && catId!=undefined && catId!="")
@@ -921,6 +921,16 @@ alert(new URL(location.href).searchParams.get("catId"));
 	ongoAjaxRequestAsync("GET",url,'', function(res){
 		console.log(res);
 		$.each(res.data, function(idx){
+		var product = res.data[idx];
+		console.log("prod"+product.name);
+        var childli = '<li><figure><a class="aa-product-img" href="#"><img src="img/women/girl-1.png" alt="polo shirt img"></a>'+
+         '<a class="aa-add-card-btn" href="#"><span class="fa fa-shopping-cart"></span>Add To Cart</a>'+
+         '<figcaption>'+
+         '<h4 class="aa-product-title"><a href="#">'+product.name+'</a></h4>'+
+          '<span class="aa-product-price">'+product.price+'</span>'+
+          '</figcaption>'+
+          '</figure> </li>';
+          $('#allProductsList').append(childli);
 			});
 		});
 }
