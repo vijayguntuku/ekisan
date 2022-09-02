@@ -861,6 +861,7 @@ function erasesession(){
 	eraseCookie('loginid')
 	eraseCookie('loginemail')	
 	eraseCookie('loginroleName')	
+	
 }
 function logout(redirect){
 	erasesession()
@@ -872,12 +873,17 @@ function logout(redirect){
 
 
 function ongoIsUserLoggedIn(){
+	
 	var issession= readCookie('loginid') != null && readCookie('loginid') != 'undefined'
-	 && readCookie('loginroleName') == 'buyer' && readCookie('loginroleName') != 'undefined';
+	 && readCookie('loginroleName') == 'seller' && readCookie('loginroleName') != 'undefined';
 	 
-	if(readCookie('loginroleName') == 'seller'){
-		window.location.href='sellerorders.html';
+	if(readCookie('loginroleName') == 'buyer'){
+		window.location.href='index.html';
 	}
+	if(!issession){
+	erasesession(true)
+	}
+	alert(readCookie('loginid'))
 	return issession;
 }
 
@@ -895,52 +901,48 @@ function ongobuildusermenu(){
 	}else{
 		$("#mycart").html('');
 		erasesession(false)
-		
 	}
-	ongoAjaxRequestAsync("GET",'/eKisan/buyer/categories','', function(res){
+}
+
+function getProductsByCategory(catId){
+window.location.href='sellerproducts.html?catId='+catId;	
+}
+function loadCategories() {
+	ongoAjaxRequestAsync("GET", '/eKisan/seller/categories', '', function(res) {
 		console.log(res);
-		var home = '<li><a href="index.html">Home</a></li>';	
-		var allPrs = '<li><a href="product.html">All Products</a></li>';	
-		$('#categoryList').append(home);
+		
+		$.each(res.data, function(idx) {
+			var cat = res.data[idx];
+			var li = $('<option value="'+cat.id+'">' + cat.name + '</option>');
+			$('#categoryList').append(li);
+		});
+	});
+}
+function loadProducts(catId){
+		ongoAjaxRequestAsync("GET",'/eKisan/seller/categories','', function(res){
+		$('#categoryList').html('');
+		var allPrs = '<li><a href="sellerproducts.html">All Products</a></li>';	
 		$('#categoryList').append(allPrs);
 		$.each(res.data, function(idx){
 	    var cat = res.data[idx];
         var li = $('<li><a href="javascript:void(0)">'+cat.name+'</a></li>').click(function(){
-        	getProductsByCategory(cat.id)
+        	loadProducts(cat.id)
         });
         $('#categoryList').append(li);
 			});
 		});
-}
-
-function getProductsByCategory(catId){
-window.location.href='product.html?catId='+catId;	
-}
-
-function loadProducts(){
-//alert(new URL(location.href).searchParams.get("catId"));
-	var catId = new URL(location.href).searchParams.get("catId");
-	var url;
-	if(catId!=null && catId!=undefined && catId!="")
-	    url = '/eKisan/buyer/productlist?categoryId='+catId;
-	else
-	    url = '/eKisan/buyer/productlist?categoryId=';
-
-	ongoAjaxRequestAsync("GET",url,'', function(res){
-		console.log(res);
-		$.each(res.data, function(idx){
-		var product = res.data[idx];
-		console.log("prod"+product.name);
-        var childli = '<li><figure><a class="aa-product-img" href="#"><img src="img/women/girl-1.png" alt="polo shirt img"></a>'+
-         '<a class="aa-add-card-btn" href="#"><span class="fa fa-shopping-cart"></span>Add To Cart</a>'+
-         '<figcaption>'+
-         '<h4 class="aa-product-title"><a href="#">'+product.name+'</a></h4>'+
-          '<span class="aa-product-price">'+product.price+'</span>'+
-          '</figcaption>'+
-          '</figure> </li>';
-          $('#allProductsList').append(childli);
-			});
-		});
+$('#allProducttable').DataTable({
+		processing: true,
+		serverSide: true,
+		ajax: ongosettings.apiurl+'/eKisan/seller/productlist',
+		columns: [
+            { data: 'id' },
+            { data: 'name' },
+            { data: 'price' },
+            { data: 'productCategoryName' },
+            { data: 'status' }
+        ],
+	});
 }
 
 function consolelogfunc(str){
@@ -953,14 +955,13 @@ function consolelogfunc(str){
 }
 
 function ongoAfterLogin(conLoginres){
-
-	createCookie('loginid', conLoginres.data['id'])
-	createCookie('loginemail', conLoginres.data['email'])
-	createCookie('loginname', conLoginres.data['name'])
-	createCookie('loginroleName', conLoginres.data['roleName'])
-	createCookie('conLoginres', JSON.stringify(conLoginres.data))
 	
-	window.location.href='index.html';
+	createCookie('loginid', conLoginres.id)
+	createCookie('loginemail', conLoginres.email)
+	createCookie('loginname', conLoginres.name)
+	createCookie('conLoginres', JSON.stringify(conLoginres))
+	
+	//window.location.href='index.html';
 	
 }
 
@@ -993,6 +994,28 @@ function ongologin(form){
 				getToast('please enter password');
 				return false;
 			}
+			getToast(res.message);
+		}
+	}, null, false)	
+
+	
+	return false;
+}
+function addProduct(form){
+	
+	var form = $('#addProductForm')
+	var pms = {};
+	pms.name = form.find('input[name=product_name]').val()
+	pms.productCategoryId = form.find('select[id=categoryList]').val()
+	pms.description = form.find('input[name=product_description]').val()
+	pms.price = form.find('input[name=product_price]').val()
+	console.log(pms)
+	ongoAjaxRequestAsync("POST",'/eKisan/seller/products', pms, function(res){
+		
+		if(res.statusCode == '200'){
+		   getToast(res.message);
+		  $('#addProductForm')[0].reset();
+		}else{
 			getToast(res.message);
 		}
 	}, null, false)	
