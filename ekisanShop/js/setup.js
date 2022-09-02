@@ -892,7 +892,9 @@ function ongobuildusermenu(){
 	ongoAjaxRequestAsync("GET",'/eKisan/buyer/categories','', function(res){
 		console.log(res);
 		var home = '<li><a href="index.html">Home</a></li>';	
+		var allPrs = '<li><a href="product.html">All Products</a></li>';	
 		$('#categoryList').append(home);
+		$('#categoryList').append(allPrs);
 		$.each(res.data, function(idx){
 	    var cat = res.data[idx];
         var li = $('<li><a href="javascript:void(0)">'+cat.name+'</a></li>').click(function(){
