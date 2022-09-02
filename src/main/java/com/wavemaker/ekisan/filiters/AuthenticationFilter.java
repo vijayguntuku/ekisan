@@ -22,11 +22,16 @@ public class AuthenticationFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest=(HttpServletRequest) servletRequest;
         HttpServletResponse httpServletResponse=(HttpServletResponse) servletResponse;
+        
+        ((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Origin", "*");
+        ((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Methods","GET, OPTIONS, HEAD, PUT, POST,DELETE");
+     
+        
         HttpSession session=httpServletRequest.getSession();
         User user = (User)session.getAttribute(Constants.SESSION_USER);
         String uri = httpServletRequest.getRequestURI();
         PrintWriter out = httpServletResponse.getWriter();
-            if(uri.contains("login")){
+            if(uri.contains("login") || uri.contains("categories") || uri.contains("products") ){
                 filterChain.doFilter(servletRequest , servletResponse);
             }else if(user!=null &&
                 ((uri.contains("admin") && DBMasterConstants.ROLE_ADMIN.equals(user.getRole()))
