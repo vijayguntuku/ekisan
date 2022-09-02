@@ -57,14 +57,19 @@ public class OrdersDaoImpl implements OrdersDao {
     }
 
     @Override
-    public List<Orders> findAllOrders() {
+    public List<Orders> findAllOrders(int buyerId ,int sellerId) {
         List<Orders> ordersList = new ArrayList<>();
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         Orders orders = null;
         try {
             connection = DBConnection.getConnectionNonSingleTon();
-            preparedStatement = connection.prepareStatement("SELECT o.*, od.* FROM orders o LEFT JOIN order_details od ON od.order_id = o.id");
+            if(buyerId != 0) {
+                preparedStatement = connection.prepareStatement("SELECT o.* from orders o where o.updatedBy="+buyerId);
+            }
+            if(sellerId != 0){
+                preparedStatement = connection.prepareStatement("SELECT o.* from orders o where o.sellerId="+sellerId);
+            }
             ResultSet resultset = preparedStatement.executeQuery();
 
             while (resultset.next()) {
@@ -77,6 +82,7 @@ public class OrdersDaoImpl implements OrdersDao {
                 orders.setUpdatedAt(resultset.getDate("updatedAt"));
                 orders.setUpdatedBy(resultset.getInt("updatedBy"));
                 orders.setStatus(resultset.getString("status"));
+                orders.setSellerId(resultset.getInt("sellerId"));
 
                 ordersList.add(orders);
             }

@@ -20,7 +20,7 @@ public class AddressDaoImpl implements AddressDao{
         Address address=null;
 
         try {
-            query = "select * from address where id=? ";
+            query = "select * from address where id=?";
             connection = DBConnection.getConnectionNonSingleTon();
             preparedStatement = connection.prepareStatement(query);
 
@@ -35,7 +35,7 @@ public class AddressDaoImpl implements AddressDao{
                 address.setCity(resultset.getString("city"));
                 address.setState(resultset.getString("state"));
                 address.setCountry(resultset.getString("country"));
-                address.setPincode(resultset.getInt("pincode"));
+                address.setPincode(resultset.getFloat("pincode"));
                 address.setUpdatedAt(resultset.getDate("updatedAt"));
                 address.setUpdatedBy(resultset.getInt("updatedBy"));
                 address.setAddress_type(resultset.getInt("address_type"));
@@ -67,9 +67,9 @@ public class AddressDaoImpl implements AddressDao{
             connection = DBConnection.getConnectionNonSingleTon();
             String query=null;
             if(address.getId() != 0){
-                query="update product set address1= ?,address2 =?,city = ?,state =?,country = ?,pincode =?,updateAt = ?,upadateBy = ?,address_type =? where id= ?";
+                query="update address set address1= ?,address2 =?,city = ?,state =?,country = ?,pincode =?,updatedAt = ?,updatedBy = ?,address_type =? where id= ?";
             }else {
-                query="insert into product(address1,address2,city,state,country,pincode,updateAt,updatedBy,address_type) values(?,?,?,?,?,?,?,?,?)";
+                query="insert into address (address1,address2,city,state,country,pincode,updatedAt,updatedBy,address_type) values(?,?,?,?,?,?,?,?,?)";
             }
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1,address.getAddress1());
@@ -120,15 +120,15 @@ public class AddressDaoImpl implements AddressDao{
             int count = preparedStatement.executeUpdate();
             isDeleted = count >0 ? true : false ;
         }catch (DatabaseException databaseException){
-            LOGGER.error("Exception while creating Database Connection.", databaseException);
+            LOGGER.error("Exception while deleting Database Connection.", databaseException);
             // databaseException.printStackTrace();
             throw databaseException;
         }catch (SQLException exception){
-            LOGGER.error("SQLException occured while reading data from Database.", exception);
-            throw new DatabaseException("Exception occured while reading data from Database.");
+            LOGGER.error("SQLException occured while deleting data from Database.", exception);
+            throw new DatabaseException("Exception occured while deleting data from Database.");
         }catch (Exception exception){
-            LOGGER.error("Exception occured while reading data from Database.", exception);
-            throw new DatabaseException("Exception occured while reading data from Database.");
+            LOGGER.error("Exception occured while deleting data from Database.", exception);
+            throw new DatabaseException("Exception occured while deleting data from Database.");
         }finally {
             DBConnection.closeConnection(connection);
         }

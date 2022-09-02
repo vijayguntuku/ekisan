@@ -28,8 +28,10 @@ public class OrdersListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Response response = null;
         try {
+            int buyerId = Integer.parseInt(req.getParameter("buyerId"));
+            int sellerId = Integer.parseInt(req.getParameter("sellerId"));
 
-            response = ordersService.findAllOrders();
+            response = ordersService.findAllOrders(buyerId,sellerId);
             PrintWriter out = resp.getWriter();
             out.println(JsonUtils.convertToString(response));
         }catch (Exception e){

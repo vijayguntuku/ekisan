@@ -9,8 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-
-
+import java.util.List;
 
 
 public class OrdersServiceImpl implements OrdersService {
@@ -41,10 +40,13 @@ public class OrdersServiceImpl implements OrdersService {
         return resp;
     }
     @Override
-    public Response findAllOrders() {
+    public Response findAllOrders(int buyerId,int sellerId) {
         Response resp = null;
         try {
-            resp = ResponseUtils.createResponse(true, "Product Retrieved successfully=",200,ordersDao.findAllOrders());
+
+            List<Orders> order = ordersDao.findAllOrders(buyerId,sellerId);
+
+            resp = ResponseUtils.createResponse(true, "Product Retrieved successfully=",200,order);
         }catch (DatabaseException e){
             String message = "OrdersServiceImpl:findAllOrders() Exception occured while reading data from Database.";
             resp = ResponseUtils.createInternalServlerErrorResponse(LOGGER, e, message);

@@ -1,9 +1,7 @@
 package com.wavemaker.ekisan.service;
 
 import com.wavemaker.ekisan.dao.AddressDao;
-import com.wavemaker.ekisan.dao.OrdersDao;
 import com.wavemaker.ekisan.dto.Address;
-import com.wavemaker.ekisan.dto.Orders;
 import com.wavemaker.ekisan.dto.Response;
 import com.wavemaker.ekisan.exception.DatabaseException;
 import com.wavemaker.ekisan.utility.ResponseUtils;
@@ -12,8 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
-public class AddressServiveImpl implements AddressService{
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProductServiceImpl.class);
+public class AddressServiceImpl implements AddressService{
+    private static final Logger LOGGER = LoggerFactory.getLogger(AddressServiceImpl.class);
 
     @Inject
     AddressDao addressDao;
@@ -30,7 +28,7 @@ public class AddressServiveImpl implements AddressService{
                 resp = ResponseUtils.createResponse(true, "No Order found with given id=."+id,200,null);
             }
         }catch (DatabaseException e){
-            String message = "AddressServiceImpl:findAdreessId(id) Exception occured while reading data from Database.";
+            String message = "AAddressServiceImpl:findAdreessId(id) Exception occured while reading data from Database.";
             resp = ResponseUtils.createInternalServlerErrorResponse(LOGGER, e, message);
         }catch (Exception e){
             String message ="AddressServiceImpl:findAdreessId(id) Exception occured while logging in to the application.";

@@ -8,7 +8,7 @@ import java.util.List;
 public interface OrdersDao {
   Orders findOrderByID(int id);
 
-  List<Orders> findAllOrders();
+  List<Orders> findAllOrders(int buyerId,int sellerId);
 
   public boolean saveOrUpdate(Orders orders);
 }
