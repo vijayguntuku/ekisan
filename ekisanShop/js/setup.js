@@ -942,6 +942,30 @@ function loadProducts(){
 			});
 		});
 }
+function findCartByUserIDAndProductId(userId,productId){
+window.location.href='product.html?userId='+userId+'&productId';
+}
+
+function addToCart(productId){
+var userId = readCookie('loginid');
+  alert(productId+''+userId);
+var cartObj = {};
+var url='/eKisan/buyer/cart';
+cartObj.userId=userId;
+cartObj.productId=productId;
+cartObj.quantity=1;
+
+ongoAjaxRequestAsync("POST",url,cartObj, function(res){
+
+        if(res.success ==true && res.statusCode == '200'){
+			$('#cartCount').val(res.data.length);
+		}else{
+			getToast(res.message);
+		}
+       },null, false);
+       return false;
+}
+
 
 function consolelogfunc(str){
 	if( consolelog ){
