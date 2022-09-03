@@ -9,4 +9,6 @@ public interface CartService {
     Response saveOrUpdateCart(Cart cart);
 
     Response deleteCart(int id);
+
+    Response findAllCartItems(int id);
 }

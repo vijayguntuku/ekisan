@@ -14,5 +14,10 @@ public class Cart {
     private int userId;
     private int productId;
     private int quantity;
+    private int sellerId;
+    private String sellerName;
+    private String productName;
+    private String productDesc;
+    private float price;
 }
 

@@ -948,7 +948,7 @@ window.location.href='product.html?userId='+userId+'&productId';
 
 function addToCart(productId){
 var userId = readCookie('loginid');
-  alert(productId+''+userId);
+  //alert(productId+''+userId);
 var cartObj = {};
 var url='/eKisan/buyer/cart';
 cartObj.userId=userId;
@@ -958,7 +958,8 @@ cartObj.quantity=1;
 ongoAjaxRequestAsync("POST",url,cartObj, function(res){
 
         if(res.success ==true && res.statusCode == '200'){
-			$('#cartCount').val(res.data.length);
+        alert(res.data);
+			$('#cartCount').html(res.data.length);
 		}else{
 			getToast(res.message);
 		}

@@ -8,7 +8,9 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CartDaoImpl implements CartDao{
 
@@ -167,5 +169,57 @@ public class CartDaoImpl implements CartDao{
             DBConnection.closeConnection(connection);
         }
         return cart;
+    }
+
+    @Override
+    public Map<Integer, List<Cart>> findAllCartItems(int id) {
+        Map<Integer, List<Cart>> cartMap = new HashMap<>();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        String query = null;
+        Cart cart =null;
+        List<Cart> cartItemsList = null;
+        try {
+            query = "SELECT c.userId,c.productId,c.quantity, p.name as productName,p.description as productDesc, p.price,p.image,seller.id as sellerId, seller.name as sellerName FROM cart c INNER JOIN product p ON c.productId=p.id INNER JOIN USER seller ON p.updatedBy=seller.id WHERE c.userId=?;";
+            connection = DBConnection.getConnectionNonSingleTon();
+            preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setInt(1, id);
+
+            ResultSet resultset = preparedStatement.executeQuery();
+            while (resultset.next()) {
+                int sellerId = resultset.getInt("sellerId");
+                if(cartMap.containsKey(sellerId)){
+                    cartItemsList = cartMap.get(sellerId);
+                }else{
+                    cartItemsList = new ArrayList<>();
+                    cartMap.put(sellerId,cartItemsList);
+                }
+                cart = new Cart();
+                cart.setSellerId(sellerId);
+                cart.setUserId(resultset.getInt("userId"));
+                cart.setProductId(resultset.getInt("productId"));
+                cart.setQuantity(resultset.getInt("quantity"));
+                cart.setSellerName(resultset.getString("sellerName"));
+                cart.setProductName(resultset.getString("productName"));
+                cart.setProductDesc(resultset.getString("productDesc"));
+                cart.setPrice(resultset.getFloat("price"));
+                cartItemsList.add(cart);
+            }
+
+        } catch (DatabaseException databaseException) {
+            LOGGER.error("Exception while displaying data from cart", databaseException);
+            // databaseException.printStackTrace();
+            throw databaseException;
+        } catch (SQLException exception) {
+            LOGGER.error("SQLException occured while reading data from cart Database.", exception);
+            throw new DatabaseException("Exception occured while reading data fromcart  Database.");
+        } catch (Exception exception) {
+            LOGGER.error("Exception occured while reading data from Database.", exception);
+            throw new DatabaseException("Exception occured while reading data from Database.");
+        } finally {
+            DBConnection.closeConnection(connection);
+        }
+        return cartMap;
     }
 }

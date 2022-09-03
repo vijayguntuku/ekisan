@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Map;
 
 public class CartServiceImpl implements CartService{
 
@@ -76,6 +77,25 @@ public class CartServiceImpl implements CartService{
             resp = ResponseUtils.createInternalServlerErrorResponse(LOGGER, e, message);
         }catch (Exception e){
             String message ="CARTServiceImpl:deleteCart() Exception occured while logging in to the application.";
+            resp = ResponseUtils.createInternalServlerErrorResponse(LOGGER,e, message);
+        }
+
+        return resp;
+    }
+
+    @Override
+    public Response findAllCartItems(int id) {
+        Response resp = null;
+        try {
+
+            Map<Integer, List<Cart>> productMap = cartDao.findAllCartItems(id);
+            resp = ResponseUtils.createResponse(true, "Cart Items retrieved successfully",200,productMap);
+
+        }catch (DatabaseException e){
+            String message = "CartServiceImpl:saveOrUpdate Exception occured while reading data from Database.";
+            resp = ResponseUtils.createInternalServlerErrorResponse(LOGGER, e, message);
+        }catch (Exception e){
+            String message ="CartServiceImpl:saveOrUpdate  Exception occured while logging in to the application.";
             resp = ResponseUtils.createInternalServlerErrorResponse(LOGGER,e, message);
         }
 
