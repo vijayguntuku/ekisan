@@ -2,8 +2,10 @@ package com.wavemaker.ekisan.dao;
 
 import com.wavemaker.ekisan.dto.Cart;
 
+import java.util.List;
+
 public interface CartDao {
-    Cart findCartByID(int id);
+    List<Cart> findCartByID(int id);
 
     boolean saveOrUpdateCart(Cart cart);
 

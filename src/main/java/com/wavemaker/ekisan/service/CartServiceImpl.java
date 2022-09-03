@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public class CartServiceImpl implements CartService{
 
@@ -21,12 +22,12 @@ public class CartServiceImpl implements CartService{
     public Response findCartById(int id) {
         Response resp = null;
         try {
-            Cart cart=cartDao.findCartByID(id);
-            if(cart!=null) {
-                resp = ResponseUtils.createResponse(true, "Order Retrieved successfully from cart table with id="+id,200,cart);
+            List<Cart> itemList=cartDao.findCartByID(id);
+            if(itemList.size()>0) {
+                resp = ResponseUtils.createResponse(true, "Order Retrieved successfully from cart table with id="+id,200,itemList);
             }
             else {
-                resp = ResponseUtils.createResponse(true, "No CartId found with given id=."+id,200,null);
+                resp = ResponseUtils.createResponse(true, "No Items found with given user id=."+id,200,null);
             }
         }catch (DatabaseException e){
             String message = "CartServiceImpl:findCartId(id) Exception occured while reading data from Database.";
@@ -44,9 +45,11 @@ public class CartServiceImpl implements CartService{
         Response resp = null;
         try {
             boolean inserted = cartDao.saveOrUpdateCart(cart);
+
             if(inserted)
             {
-                resp = ResponseUtils.createResponse(true, "Data saved successfully",200,null);
+                List<Cart> itemsList = cartDao.findCartByID(cart.getUserId());
+                resp = ResponseUtils.createResponse(true, "Data saved successfully",200,itemsList);
             }
 
         }catch (DatabaseException e){
