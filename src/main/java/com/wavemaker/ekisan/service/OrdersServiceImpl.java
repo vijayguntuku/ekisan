@@ -96,7 +96,7 @@ public class OrdersServiceImpl implements OrdersService {
             boolean deleted = cartDao.deleteCart(id);
             if(inserted)
             {
-                resp = ResponseUtils.createResponse(true, "Data saved successfully",200,null);
+                resp = ResponseUtils.createResponse(true, "Order placed successfully.. Sit back and relax, your order will be delivered in a week..",200,null);
             }
 
         }catch (DatabaseException e){

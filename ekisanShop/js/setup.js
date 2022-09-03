@@ -887,11 +887,11 @@ function ongobuildusermenu(){
 		$('#usermenu').html('');
 		var profile = '<li><a href="myaccount.html">Profile</a></li>';	
 		var mycart = '<li class="hidden-xs"><a href="cart.html">My Cart</a></li>';
-		var mycheckout='<li class="hidden-xs"><a href="checkout.html">Checkout</a></li>';
+		var myorders='<li class="hidden-xs"><a href="orders.html">My Orders</a></li>';
         var signout = $('<li><a href="javascript:void(0)">Signout</a></li>').click(function(){
         	logout(true)
         });
-        $('#usermenu').append(profile).append(mycart).append(mycheckout).append(signout);
+        $('#usermenu').append(profile).append(mycart).append(myorders).append(signout);
 	}else{
 		$("#mycart").html('');
 		erasesession(false)
@@ -1070,6 +1070,22 @@ function consolelogfunc(str){
 	}	
 	
 }
+function loadOrders() {
+	var userId = readCookie('loginid');
+	$('#allOderstable').DataTable({
+		processing: true,
+		serverSide: true,
+		ajax: ongosettings.apiurl + '/eKisan/buyer/listallorders?buyerId='+userId+'&sellerId=0',
+		columns: [
+			{ data: 'id' },
+			{ data: 'total_items' },
+			{ data: 'total_amount' },
+			{ data: 'delivery_address_id' },
+			{ data: 'updatedBy' }
+		],
+	});
+}
+
 
 function ongoAfterLogin(conLoginres){
 
