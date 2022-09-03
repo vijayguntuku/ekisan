@@ -11,4 +11,6 @@ public interface CartService {
     Response deleteCart(int id);
 
     Response findAllCartItems(int id);
+
+	Response deleteItemFromCart(int userId, int productId);
 }

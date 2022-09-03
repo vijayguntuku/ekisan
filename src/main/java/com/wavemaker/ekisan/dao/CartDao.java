@@ -15,4 +15,6 @@ public interface CartDao {
     Cart findCartByUserIDAndProductId(int userId, int productId);
 
     Map<Integer, List<Cart>> findAllCartItems(int id);
+
+	boolean deleteItemFromCart(int userId, int productId);
 }

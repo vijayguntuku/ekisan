@@ -50,7 +50,7 @@ public class CartServiceImpl implements CartService{
             if(inserted)
             {
                 List<Cart> itemsList = cartDao.findCartByID(cart.getUserId());
-                resp = ResponseUtils.createResponse(true, "Data saved successfully",200,itemsList);
+                resp = ResponseUtils.createResponse(true, "Item added succesfully to cart.",200,itemsList);
             }
 
         }catch (DatabaseException e){
@@ -101,4 +101,23 @@ public class CartServiceImpl implements CartService{
 
         return resp;
     }
+
+	@Override
+	public Response deleteItemFromCart(int userId, int productId) {
+		Response resp = null;
+        try {
+            boolean isDeleted = cartDao.deleteItemFromCart(userId, productId);
+            if(isDeleted) {
+                resp = ResponseUtils.createResponse(true, "Iteam deleted successfully from cart.",200,null);
+            }
+        }catch (DatabaseException e){
+            String message = "cartServiceImpl:deleteCart() Exception occured while reading data from Database.";
+            resp = ResponseUtils.createInternalServlerErrorResponse(LOGGER, e, message);
+        }catch (Exception e){
+            String message ="CARTServiceImpl:deleteCart() Exception occured while logging in to the application.";
+            resp = ResponseUtils.createInternalServlerErrorResponse(LOGGER,e, message);
+        }
+
+        return resp;
+	}
 }

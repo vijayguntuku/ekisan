@@ -93,44 +93,6 @@
                 <!-- <a href="sellerproducts.html"><img src="img/logo.jpg" alt="logo img"></a> -->
               </div>
               <!-- / logo  -->
-               <!-- cart box -->
-              <div class="aa-cartbox"  id="mycart">
-                <a class="aa-cart-link" href="#">
-                  <span class="fa fa-shopping-basket"></span>
-                  <span class="aa-cart-title">CART</span>
-                  <span class="aa-cart-notify">2</span>
-                </a>
-                <div class="aa-cartbox-summary">
-                  <ul>
-                    <li>
-                      <a class="aa-cartbox-img" href="#"><img src="img/woman-small-2.jpg" alt="img"></a>
-                      <div class="aa-cartbox-info">
-                        <h4><a href="#">Product Name</a></h4>
-                        <p>1 x $250</p>
-                      </div>
-                      <a class="aa-remove-product" href="#"><span class="fa fa-times"></span></a>
-                    </li>
-                    <li>
-                      <a class="aa-cartbox-img" href="#"><img src="img/woman-small-1.jpg" alt="img"></a>
-                      <div class="aa-cartbox-info">
-                        <h4><a href="#">Product Name</a></h4>
-                        <p>1 x $250</p>
-                      </div>
-                      <a class="aa-remove-product" href="#"><span class="fa fa-times"></span></a>
-                    </li>                    
-                    <li>
-                      <span class="aa-cartbox-total-title">
-                        Total
-                      </span>
-                      <span class="aa-cartbox-total-price">
-                        $500
-                      </span>
-                    </li>
-                  </ul>
-                  <a class="aa-cartbox-checkout aa-primary-btn" href="checkout.html">Checkout</a>
-                </div>
-              </div>
-              <!-- / cart box -->
                       
             </div>
           </div>
@@ -157,8 +119,8 @@
           <div class="navbar-collapse collapse">
             <!-- Left nav -->
             <ul class="nav navbar-nav" >
-              <li><a href="sellerproducts.html">Orders</a></li>
-               <li><a href="sellerorders.html">Products</a></li>
+              <li><a href="sellerorders.html">Orders</a></li>
+               <li><a href="sellerproducts.html">Products</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -173,20 +135,19 @@
   <section id="aa-product-category">
     <div class="container">
      <div class="row">
-        <div class="col-lg-9 col-md-9 col-sm-8 col-md-push-3">
+        <div class="col-md-12">
         <br />
-      <a  href="seller_addProduct.html" style="float: right;">Add product<span class="fa fa-plus"></span></a>
           <div class="aa-product-catg-content">
             <div class="aa-product-catg-body">
             
-            <table id="allProducttable" class="display" style="width:100%">
+            <table id="allOderstable" class="display" style="width:100%">
         <thead>
             <tr>
-                <th>Product ID</th>
-                <th>Product Name</th>
-                <th>Price</th>
-                <th>Category</th>
-                <th>Status</th>
+                <th>ORDER ID</th>
+                <th>Total Items</th>
+                <th>Total amount</th>
+                <th>Address Id</th>
+                <th>UserID</th>
             </tr>
         </thead>
    
@@ -195,18 +156,7 @@
            
           </div>
         </div>
-        <div class="col-lg-3 col-md-3 col-sm-4 col-md-pull-9">
-          <aside class="aa-sidebar">
-            <!-- single sidebar -->
-            <div class="aa-sidebar-widget">
-              <h3>Category</h3>
-              <ul class="aa-catg-nav" id="categoryList">
-               
-              </ul>
-            </div>
-           
-          </aside>
-        </div>
+
        
       </div>
       </div>

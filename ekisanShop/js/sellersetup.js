@@ -873,7 +873,7 @@ function logout(redirect){
 
 
 function ongoIsUserLoggedIn(){
-	
+	console.log(sessionStorage)
 	var issession= readCookie('loginid') != null && readCookie('loginid') != 'undefined'
 	 && readCookie('loginroleName') == 'seller' && readCookie('loginroleName') != 'undefined';
 	 
@@ -882,22 +882,21 @@ function ongoIsUserLoggedIn(){
 	}
 	if(!issession){
 	erasesession(true)
+	//window.location.href='index.html';
 	}
-	alert(readCookie('loginid'))
 	return issession;
 }
-
+function ongologinid(){
+	var loginid = readCookie('loginid');
+	return loginid == null || loginid == '' ? '' : parseInt(ongoorgid);
+}
 function ongobuildusermenu(){	
-	
 	if(ongoIsUserLoggedIn()){	
 		$('#usermenu').html('');
-		var profile = '<li><a href="myaccount.html">Profile</a></li>';	
-		var mycart = '<li class="hidden-xs"><a href="cart.html">My Cart</a></li>';
-		var mycheckout='<li class="hidden-xs"><a href="checkout.html">Checkout</a></li>';
         var signout = $('<li><a href="javascript:void(0)">Signout</a></li>').click(function(){
         	logout(true)
         });
-        $('#usermenu').append(profile).append(mycart).append(mycheckout).append(signout);
+        $('#usermenu').append(signout);
 	}else{
 		$("#mycart").html('');
 		erasesession(false)
@@ -941,6 +940,21 @@ $('#allProducttable').DataTable({
             { data: 'price' },
             { data: 'productCategoryName' },
             { data: 'status' }
+        ],
+	});
+}
+function loadOrders(){
+
+$('#allOderstable').DataTable({
+		processing: true,
+		serverSide: true,
+		ajax: ongosettings.apiurl+'/eKisan/buyer/listallorders?buyerId=1&sellerId=0',
+		columns: [
+            { data: 'id' },
+            { data: 'total_items' },
+            { data: 'total_amount' },
+            { data: 'delivery_address_id' },
+            { data: 'updatedBy' }
         ],
 	});
 }

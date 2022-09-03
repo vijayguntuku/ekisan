@@ -11,4 +11,6 @@ public interface OrdersService {
 
     Response saveOrUpdate(Orders orders);
 
+	Response checkOrder(int id, int addressId);
+
 }

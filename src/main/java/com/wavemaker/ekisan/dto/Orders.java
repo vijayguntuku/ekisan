@@ -17,7 +17,7 @@ import java.util.Date;
 public class Orders{
     private int id;
     private int total_items;
-    private float total_amount;
+    private double total_amount;
     private Date date;
     private int delivery_address_id;
     private Date updatedAt;

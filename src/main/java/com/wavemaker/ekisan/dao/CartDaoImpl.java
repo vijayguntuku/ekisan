@@ -222,4 +222,33 @@ public class CartDaoImpl implements CartDao{
         }
         return cartMap;
     }
+
+	@Override
+	public boolean deleteItemFromCart(int userId, int productId) {
+		 Connection connection= null;
+	        PreparedStatement preparedStatement = null;
+	        boolean isDeleted=false;
+	        try{
+	            connection = DBConnection.getConnectionNonSingleTon();
+	            preparedStatement= connection.prepareStatement("delete from cart where userId=? and productId=?");
+	            preparedStatement.setInt(1,userId);
+	            preparedStatement.setInt(2,productId);
+
+	            int count = preparedStatement.executeUpdate();
+	            isDeleted = count >0 ? true : false ;
+	        }catch (DatabaseException databaseException){
+	            LOGGER.error("Exception while deleting data into cart Database Connection.", databaseException);
+	            // databaseException.printStackTrace();
+	            throw databaseException;
+	        }catch (SQLException exception){
+	            LOGGER.error("SQLException occurred while deleting data from cart Database.", exception);
+	            throw new DatabaseException("Exception occurred while deleting data from cart Database.");
+	        }catch (Exception exception){
+	            LOGGER.error("Exception occurred while deleting data from cart Database.", exception);
+	            throw new DatabaseException("Exception occured while deleting data from Database.");
+	        }finally {
+	            DBConnection.closeConnection(connection);
+	        }
+	        return isDeleted;
+	}
 }

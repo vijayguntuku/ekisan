@@ -18,6 +18,6 @@ public class Cart {
     private String sellerName;
     private String productName;
     private String productDesc;
-    private float price;
+    private double price;
 }
 

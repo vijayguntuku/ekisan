@@ -94,40 +94,12 @@
               <!-- / logo  -->
                <!-- cart box -->
               <div class="aa-cartbox"  id="mycart">
-                <a class="aa-cart-link" href="#">
+                <a class="aa-cart-link" href="cart.html">
                   <span class="fa fa-shopping-basket"></span>
                   <span class="aa-cart-title">CART</span>
-                  <span class="aa-cart-notify" id="cartCount">2</span>
+                  <span class="aa-cart-notify" id="cartCount"></span>
                 </a>
-                <div class="aa-cartbox-summary">
-                  <ul>
-                    <li>
-                      <a class="aa-cartbox-img" href="#"><img src="img/woman-small-2.jpg" alt="img"></a>
-                      <div class="aa-cartbox-info">
-                        <h4><a href="#">Product Name</a></h4>
-                        <p>1 x $250</p>
-                      </div>
-                      <a class="aa-remove-product" href="#"><span class="fa fa-times"></span></a>
-                    </li>
-                    <li>
-                      <a class="aa-cartbox-img" href="#"><img src="img/woman-small-1.jpg" alt="img"></a>
-                      <div class="aa-cartbox-info">
-                        <h4><a href="#">Product Name</a></h4>
-                        <p>1 x $250</p>
-                      </div>
-                      <a class="aa-remove-product" href="#"><span class="fa fa-times"></span></a>
-                    </li>                    
-                    <li>
-                      <span class="aa-cartbox-total-title">
-                        Total
-                      </span>
-                      <span class="aa-cartbox-total-price">
-                        $500
-                      </span>
-                    </li>
-                  </ul>
-                  <a class="aa-cartbox-checkout aa-primary-btn" href="checkout.html">Checkout</a>
-                </div>
+
               </div>
               <!-- / cart box -->
                       
@@ -342,7 +314,16 @@
     </div>
   </section>
   <!-- / Subscribe section -->
-
+	<div class="modal fade" id="modalerrorpopup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">                      
+        <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <p id="modalerrormsg"></p>
+        </div>
+      </div>
+    </div>
+	</div>
   <!-- footer -->  
   <footer id="aa-footer">
     <!-- footer-bottom -->
@@ -410,7 +391,9 @@
   <script src="js/custom.js"></script> 
   <script src="js/setup.js"></script> 
    <script type="text/javascript">
+    updateCartCount();
     loadProducts();
+   
    </script>
   </body>
 </html>

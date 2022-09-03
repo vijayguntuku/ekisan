@@ -927,7 +927,7 @@ function loadProducts(){
 	    url = '/eKisan/buyer/productlist?categoryId=';
 
 	ongoAjaxRequestAsync("GET",url,'', function(res){
-		console.log(res);
+		//console.log(res);
 		$.each(res.data, function(idx){
 		var product = res.data[idx];
 		console.log("prod"+product.name);
@@ -946,27 +946,121 @@ function findCartByUserIDAndProductId(userId,productId){
 window.location.href='product.html?userId='+userId+'&productId';
 }
 
-function addToCart(productId){
-var userId = readCookie('loginid');
-  //alert(productId+''+userId);
-var cartObj = {};
-var url='/eKisan/buyer/cart';
-cartObj.userId=userId;
-cartObj.productId=productId;
-cartObj.quantity=1;
+function addToCart(productId) {
+	var userId = readCookie('loginid');
+	//alert(productId+''+userId);
+	var cartObj = {};
+	var url = '/eKisan/buyer/cart';
+	cartObj.userId = userId;
+	cartObj.productId=productId;
+	cartObj.quantity = 1;
 
-ongoAjaxRequestAsync("POST",url,cartObj, function(res){
+	ongoAjaxRequestAsync("POST", url, cartObj, function(res) {
 
-        if(res.success ==true && res.statusCode == '200'){
-        alert(res.data);
+		if (res.success == true && res.statusCode == '200') {
+			// alert(res.data);
+			getToast(res.message);
 			$('#cartCount').html(res.data.length);
-		}else{
+			//alert(res.message);
+		} else {
 			getToast(res.message);
 		}
-       },null, false);
-       return false;
+	}, null, false);
+	return false;
 }
 
+function updateCartCount() {
+	var userId = readCookie('loginid');
+	var url = '/eKisan/buyer/cart?id=' + userId;
+
+	ongoAjaxRequestAsync("GET", url, null, function(res) {
+
+		if (res.success == true && res.statusCode == '200') {
+			//alert(res.data);
+			var count = res.data!=null && res.data.length>0?res.data.length:0;
+			$('#cartCount').html(count);
+		} else {
+			getToast(res.message);
+		}
+	});
+
+}
+
+function getCartDetails() {
+	var userId = readCookie('loginid');
+	var url = '/eKisan/buyer/checkout?id=' + userId;
+
+	ongoAjaxRequestAsync("GET", url, null, function(res) {
+		if (res.success == true && res.statusCode == '200') {
+			var totalCartAmount=0;
+			$.each(res.data, function(idx) {
+				var productList = res.data[idx];
+				var childSeller = '<tr style="color:silver;text-align:left"><td colspan="6" style="background-color:lightgreen;color:white;text-align:left" >'+res.data[idx][0].sellerName+'</td></tr>';
+				$('#cartTableBody').append(childSeller);
+				$.each(productList, function(pdx) {
+					var totalAmount = productList[pdx].price*productList[pdx].quantity;
+					totalCartAmount = totalCartAmount+totalAmount;
+					var sellerProduct =
+						'<tr><td><a onclick="deleteItemFromCart('+productList[pdx].productId+')" class="remove" href="#"><fa class="fa fa-close"></fa></a></td>' +
+						'<td><a href="#" ><img src="img/man/polo-shirt-1.png" alt="img"></a></td>' +
+						'<td><a class="aa-cart-title" href="#">'+productList[pdx].productName+'</a></td>' +
+						'<td>'+productList[pdx].price+'</td>' +
+						'<td>'+productList[pdx].quantity+'</td>' +
+						'<td>'+totalAmount+'</td><tr>';
+					$('#cartTableBody').append(sellerProduct);
+				});
+			});
+			$('#cartSubTotal').html(totalCartAmount);
+			$('#cartTotal').html(totalCartAmount);
+			//console.log("prod"+product.name);
+
+		} else {
+			getToast(res.message);
+		}
+
+	});
+
+}
+
+
+function deleteItemFromCart(productId) {
+	var userId = readCookie('loginid');
+	var url = '/eKisan/buyer/checkout?userId=' + userId+'&productId='+productId;
+	ongoAjaxRequestAsync("DELETE", url, null, function(res) {
+
+		if (res.success == true && res.statusCode == '200') {
+			//alert(res.data);
+			
+			getToast(res.message);
+			$('#cartSubTotal').html(0);
+			$('#cartTotal').html(0);
+			$('#cartTableBody').html('');
+			getCartDetails();
+			
+			
+		} else {
+			getToast(res.message);
+		}
+	});
+
+}
+
+function submitOrder() {
+	var userId = readCookie('loginid');
+	var url = '/eKisan/buyer/checkout?userId=' + userId+'&addressId='+1;
+
+	ongoAjaxRequestAsync("POST", url, null, function(res) {
+
+		if (res.success == true && res.statusCode == '200') {
+			alert(res.message);
+			//$('#cartCount').html(res.data.length);
+			window.location.href = 'product.html';
+		} else {
+			getToast(res.message);
+		}
+	}, null, false);
+	return false;
+}
 
 function consolelogfunc(str){
 	if( consolelog ){
@@ -985,7 +1079,13 @@ function ongoAfterLogin(conLoginres){
 	createCookie('loginroleName', conLoginres.data['roleName'])
 	createCookie('conLoginres', JSON.stringify(conLoginres.data))
 	
-	window.location.href='index.html';
+	//alert(conLoginres.data['roleName'])
+	if(conLoginres.data['roleName'] == 'seller'){
+		window.location.href='sellerorders.html';
+	}
+	if(conLoginres.data['roleName'] == 'buyer'){
+	   window.location.href='index.html';
+	}
 	
 }
 

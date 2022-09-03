@@ -26,12 +26,13 @@ public class UserDaoImpl implements UserDao{
             preparedStatement.setString(2, password);
             ResultSet resultset = preparedStatement.executeQuery();
 
-            resultset.next();
-            user = new User();
-            user.setId(resultset.getInt("id"));
-            user.setEmail(resultset.getString("email"));
-            user.setName(resultset.getString("Name"));
-            user.setRoleName(resultset.getString("rolename"));
+            while(resultset.next()) {
+	            user = new User();
+	            user.setId(resultset.getInt("id"));
+	            user.setEmail(resultset.getString("email"));
+	            user.setName(resultset.getString("Name"));
+	            user.setRoleName(resultset.getString("rolename"));
+	         }
 
 
         }catch (DatabaseException databaseException){

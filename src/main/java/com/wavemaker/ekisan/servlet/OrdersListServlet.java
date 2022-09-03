@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(urlPatterns = {"/seller/listallorders"})
+@WebServlet(urlPatterns = {"/seller/listallorders","/buyer/listallorders"})
 public class OrdersListServlet extends HttpServlet {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrdersListServlet.class);

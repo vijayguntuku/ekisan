@@ -1,15 +1,20 @@
 package com.wavemaker.ekisan.service;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.wavemaker.ekisan.dao.CartDao;
 import com.wavemaker.ekisan.dao.OrdersDao;
+import com.wavemaker.ekisan.dto.Cart;
 import com.wavemaker.ekisan.dto.Orders;
 import com.wavemaker.ekisan.dto.Response;
 import com.wavemaker.ekisan.exception.DatabaseException;
 import com.wavemaker.ekisan.utility.ResponseUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.inject.Inject;
-import java.util.List;
 
 
 public class OrdersServiceImpl implements OrdersService {
@@ -17,6 +22,10 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Inject
     OrdersDao ordersDao;
+    
+    @Inject
+    CartDao cartDao;
+    
 
     @Override
     public Response findOrderById(int id) {
@@ -78,5 +87,27 @@ public class OrdersServiceImpl implements OrdersService {
 
         return resp;
     }
+	@Override
+	public Response checkOrder(int id, int addressId) {
+		Response resp = null;
+        try {
+        	Map<Integer, List<Cart>> cartMap = cartDao.findAllCartItems(id);
+            boolean inserted = ordersDao.checkOutOrder(id,cartMap, addressId);
+            boolean deleted = cartDao.deleteCart(id);
+            if(inserted)
+            {
+                resp = ResponseUtils.createResponse(true, "Data saved successfully",200,null);
+            }
+
+        }catch (DatabaseException e){
+            String message = "ProductServiceImpl:insert() Exception occured while reading data from Database.";
+            resp = ResponseUtils.createInternalServlerErrorResponse(LOGGER, e, message);
+        }catch (Exception e){
+            String message ="ProductServiceImpl:insert() Exception occured while logging in to the application.";
+            resp = ResponseUtils.createInternalServlerErrorResponse(LOGGER,e, message);
+        }
+
+        return resp;
+	}
 
 }
