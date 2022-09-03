@@ -31,7 +31,8 @@ public class AuthenticationFilter implements Filter {
         User user = (User)session.getAttribute(Constants.SESSION_USER);
         String uri = httpServletRequest.getRequestURI();
         PrintWriter out = httpServletResponse.getWriter();
-            if(uri.contains("login") || uri.contains("categories") || uri.contains("products") || uri.contains("productlist") ){
+        filterChain.doFilter(servletRequest , servletResponse);
+            /*if(uri.contains("login") || uri.contains("categories") || uri.contains("products") || uri.contains("productlist") ){
                 filterChain.doFilter(servletRequest , servletResponse);
             }else if(user!=null &&
                 ((uri.contains("admin") && DBMasterConstants.ROLE_ADMIN.equals(user.getRoleName()))
@@ -46,7 +47,7 @@ public class AuthenticationFilter implements Filter {
             Response resp = ResponseUtils.createResponse(false,"You dont have access to this resouces..", 403,null);
             httpServletResponse.setStatus(403);
             out.println(JsonUtils.convertToString(resp));
-        }
+        }*/
 
 
     }

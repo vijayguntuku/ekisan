@@ -50,8 +50,8 @@ public class CartServlet extends HttpServlet {
         try {
             Cart cart =JsonUtils.convertToObject(req, Cart.class);
             HttpSession session=req.getSession();
-            User user = (User)session.getAttribute(Constants.SESSION_USER);
-            cart.setUserId(user.getId());
+            //User user = (User)session.getAttribute(Constants.SESSION_USER);
+            //cart.setUserId(user.getId());
             resp = cartService.saveOrUpdateCart(cart);
             PrintWriter out = response.getWriter();
             out.println(JsonUtils.convertToString(resp));
